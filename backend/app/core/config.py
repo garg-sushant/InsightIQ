@@ -101,7 +101,12 @@ class Settings(BaseSettings):
     @property
     def sync_database_url(self) -> str:
         """Alembic and the seed script use the sync driver."""
-        return self.database_url.replace("+asyncpg", "").replace("+aiosqlite", "")
+        url = self.database_url.replace("+asyncpg", "").replace("+aiosqlite", "")
+        if "?ssl=" in url:
+            url = url.replace("?ssl=", "?sslmode=")
+        elif "&ssl=" in url:
+            url = url.replace("&ssl=", "&sslmode=")
+        return url
 
 
 @lru_cache(maxsize=1)

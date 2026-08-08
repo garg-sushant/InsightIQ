@@ -1,0 +1,74 @@
+name: insightiq
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: insightiq-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-insightiq}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-insightiq_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-insightiq}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-insightiq} -d ${POSTGRES_DB:-insightiq}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: insightiq-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://insightiq:insightiq_dev_password@db:5432/insightiq}
+      SECRET_KEY: ${SECRET_KEY:-dev-insecure-secret-key-change-me-0000000000000000000000000000}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      LOG_JSON: ${LOG_JSON:-false}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
+      AI_PROVIDER: ${AI_PROVIDER:-auto}
+      GROK_API_KEY: ${GROK_API_KEY:-}
+      GROK_BASE_URL: ${GROK_BASE_URL:-https://api.x.ai/v1}
+      GROK_MODEL: ${GROK_MODEL:-grok-4}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-25}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    # Migrations run on boot so `docker compose up` alone yields a working API.
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+    container_name: insightiq-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+
+volumes:
+  pgdata:

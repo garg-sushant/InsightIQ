@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="50%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Container -->
+  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#brand-grad)" />
+  
+  <!-- Bar Chart Bars -->
+  <rect x="6" y="16" width="4" height="10" rx="1.5" fill="#ffffff" fill-opacity="0.7" />
+  <rect x="12" y="11" width="4" height="15" rx="1.5" fill="#ffffff" fill-opacity="0.9" />
+  <rect x="18" y="7" width="4" height="19" rx="1.5" fill="#ffffff" />
+  <rect x="24" y="13" width="4" height="13" rx="1.5" fill="#ffffff" fill-opacity="0.8" />
+  
+  <!-- Sparkle / Dot Accent -->
+  <circle cx="20" cy="5" r="1.5" fill="#38bdf8" />
+</svg>

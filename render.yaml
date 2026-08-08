@@ -1,0 +1,36 @@
+# Render Blueprint. Import this repo in the Render dashboard, or run:
+#   render blueprint launch
+# Neon Postgres is used instead of Render's managed Postgres — set DATABASE_URL
+# manually in the service's environment (see SETUP_REQUIRED.md).
+services:
+  - type: web
+    name: insightiq-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: starter
+    autoDeployTrigger: commit
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: LOG_JSON
+        value: "true"
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false
+      - key: AI_PROVIDER
+        value: auto
+      - key: GROK_API_KEY
+        sync: false
+      - key: GROK_BASE_URL
+        value: https://api.x.ai/v1
+      - key: GROK_MODEL
+        value: grok-4
+    buildCommand: ""
+    startCommand: "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT"

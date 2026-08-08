@@ -1,0 +1,8 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "env": {
+    "NEXT_PUBLIC_API_BASE_URL": "@insightiq_api_base_url"
+  }
+}

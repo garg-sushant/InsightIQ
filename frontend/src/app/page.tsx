@@ -211,7 +211,7 @@ export default function HomePage() {
                         <Sparkles className="h-4 w-4" /> AI Executive Summary
                       </div>
                       <p className="mt-3 text-sm leading-relaxed text-foreground">
-                        "Revenue grew 14.2% quarter-over-quarter driven primarily by Corporate segment expansion in Technology categories. However, return rates in the West region increased by 4.1 percentage points, impacting net profitability."
+                        &quot;Revenue grew 14.2% quarter-over-quarter driven primarily by Corporate segment expansion in Technology categories. However, return rates in the West region increased by 4.1 percentage points, impacting net profitability.&quot;
                       </p>
                       <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
                         <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" /> Grounded exclusively in verified computed numbers. No halluncinated metrics.
@@ -231,7 +231,7 @@ export default function HomePage() {
                         </div>
                         <div>
                           <h4 className="font-semibold">Pydantic Privacy Payload Boundary</h4>
-                          <p className="text-xs text-muted-foreground">`AIPayload` uses `extra="forbid"` and contains only aggregate numbers.</p>
+                          <p className="text-xs text-muted-foreground"><code>AIPayload</code> uses <code>extra=&quot;forbid&quot;</code> and contains only aggregate numbers.</p>
                         </div>
                       </div>
                       <div className="rounded-lg bg-zinc-950 p-4 text-xs font-mono text-emerald-400 overflow-x-auto">

@@ -10,6 +10,9 @@ numbers*. Export to PDF or PowerPoint at any time.
 **The core guarantee:** the AI never calculates anything and never sees raw
 data. See [Architecture → the AI boundary](#the-ai-boundary) below.
 
+# InsightIQ
+
+🚀 **Live Demo:** https://gargsushantinsightiq-inky.vercel.app/
 ## Quick start
 
 ```bash
